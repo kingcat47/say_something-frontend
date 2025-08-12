@@ -1,0 +1,19 @@
+.container {
+  position: fixed;
+  top: 20px;
+  right: 5px; /* 오른쪽 끝에 붙이기 */
+}
+.input {
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 200px;
+
+  &:focus {
+    border-color: #ff9800; /* 주황 */
+    box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.15);
+  }
+}

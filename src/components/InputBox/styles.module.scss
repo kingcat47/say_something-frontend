@@ -1,0 +1,44 @@
+.container{
+  width: 230px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 10px;
+  .input {
+    padding: 10px 14px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 200px;
+
+    &:focus {
+      border-color: #ff9800; /* 주황 */
+      box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.15);
+    }
+  }
+
+  .button {
+
+    width: 230px;
+    padding: 10px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    background-color: #ff9800; /* 주황 */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+
+    &:hover {
+      background-color: #e68a00; /* 진한 주황 */
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+}

@@ -1,0 +1,14 @@
+.container {
+    margin-right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 20%;
+    height: 100vh;
+    border-left: 2px solid #a8a8a8;
+    background-color: #44704e;
+    position: fixed;
+    top: 0;
+    right: 0; /* 오른쪽 끝에 붙이기 */
+}
