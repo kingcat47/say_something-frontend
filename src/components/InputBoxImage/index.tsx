@@ -18,17 +18,31 @@ export default function InputBoxImage({ port }: InputBoxImageProps) {
     };
 
     const sendImage = (fileToSend: File) => {
+        const chunkSize = 64 * 1024; // 64KB
+        let offset = 0;
         const reader = new FileReader();
 
+        const sendChunk = (chunk: ArrayBuffer) => {
+            const base64Chunk = btoa(
+                new Uint8Array(chunk).reduce((data, byte) => data + String.fromCharCode(byte), '')
+            );
+                console.log('이미지 전송 중...');
+            socket.emit("sendImage", {
+                port: port.trim() || '',
+                fileChunk: base64Chunk,
+                isLastChunk: offset >= fileToSend.size
+            });
+        };
+
         reader.onload = () => {
-            if (reader.result && typeof reader.result === 'string') {
-                console.log("Sending image to port:", port);
-                socket.emit("sendImage", {
-                    port: port.trim() || '',
-                    file: reader.result,
-                });
+            if (reader.result instanceof ArrayBuffer) {
+                sendChunk(reader.result);
+                offset += chunkSize;
+                if (offset < fileToSend.size) {
+                    readNextChunk();
+                }
             } else {
-                console.error("FileReader result is not a string (Base64 data)");
+                console.error("Unexpected FileReader result type");
             }
         };
 
@@ -36,8 +50,14 @@ export default function InputBoxImage({ port }: InputBoxImageProps) {
             console.error("Error reading file:", error);
         };
 
-        reader.readAsDataURL(fileToSend);
+        const readNextChunk = () => {
+            const slice = fileToSend.slice(offset, offset + chunkSize);
+            reader.readAsArrayBuffer(slice);
+        };
+
+        readNextChunk();
     };
+
 
     const handleSubmit = () => {
         if (!file) {

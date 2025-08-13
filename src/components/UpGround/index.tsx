@@ -25,6 +25,7 @@ let nextId = 0;
 
 export default function UpGround() {
     const [messages, setMessages] = useState<Message[]>([]);
+    const imageBuffers = new Map<string, string[]>(); // chunk 임시 저장
 
     useEffect(() => {
         // 텍스트 메시지
@@ -42,26 +43,41 @@ export default function UpGround() {
             }, 4000);
         });
 
-        // 이미지 메시지 (base64)
-        socket.on("image", (msg: { port: string; file: string }) => {
-            const newMsg: ImageMessage = {
-                id: nextId++,
-                port: msg.port || "ALL",
-                type: "image",
-                base64Src: msg.file, // base64 문자열 직접 사용
-                left: Math.random() * 80
-            };
+        // 이미지 메시지 (Chunk 방식)
+        socket.on("imageChunk", (data: { port: string; fileChunk: string; chunkIndex: number; isLastChunk: boolean }) => {
+            const chunkKey = data.port;
 
-            setMessages(prev => [...prev, newMsg]);
+            if (!imageBuffers.has(chunkKey)) {
+                imageBuffers.set(chunkKey, []);
+            }
 
-            setTimeout(() => {
-                setMessages(prev => prev.filter(m => m.id !== newMsg.id));
-            }, 4000);
+            const chunks = imageBuffers.get(chunkKey)!;
+            chunks[data.chunkIndex] = data.fileChunk;
+
+            if (data.isLastChunk) {
+                const fullBase64 = chunks.join('');
+                const newMsg: ImageMessage = {
+                    id: nextId++,
+                    port: data.port || "ALL",
+                    type: "image",
+                    base64Src: fullBase64,
+                    left: Math.random() * 80
+                };
+
+                setMessages(prev => [...prev, newMsg]);
+
+                setTimeout(() => {
+                    setMessages(prev => prev.filter(m => m.id !== newMsg.id));
+                }, 4000);
+
+                // 임시 buffer 삭제
+                imageBuffers.delete(chunkKey);
+            }
         });
 
         return () => {
             socket.off("message");
-            socket.off("image");
+            socket.off("imageChunk");
         };
     }, []);
 
