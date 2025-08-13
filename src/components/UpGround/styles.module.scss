@@ -3,3 +3,33 @@
   width: 80%;
   background-color: orange;
 }
+
+.bubble {
+  position: absolute;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 8px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  animation: floatUp 4s linear forwards;
+  white-space: nowrap;
+}
+
+.port {
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
