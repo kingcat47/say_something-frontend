@@ -15,6 +15,7 @@ export default function FillterPort() {
 
     return (
         <div className={styles.container}>
+            <span className={styles.title}>Read_Port</span>
             <input
                 value={readPort}
                 onChange={readingPort}

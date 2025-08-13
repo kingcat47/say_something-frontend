@@ -1,49 +1,48 @@
 import styles from './styles.module.scss';
 import { useState } from "react";
-import { socket } from "../../socket"; // 전역 소켓 사용
+import { socket } from "../../socket";
 
-export default function InputBox() {
+interface InputBoxProps {
+    port: string;
+}
+
+export default function InputBox({ port }: InputBoxProps) {
     const [text, setText] = useState('');
-    const [port, setPort] = useState('');
 
-    const handleChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setText(e.target.value);
     };
-
-    const handleChangePort = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPort(e.target.value);
-    };
-
     const handleSubmit = () => {
         if (!text.trim()) {
-            alert("please input text");
+            alert("Please input text");
             return;
         }
 
-        // 비어있으면 기본값 ""
-        socket.emit("sendMessage", { port: String(port || ''), text: text.trim() });
+        socket.emit("sendMessage", {
+            port: port.trim() || '', // 빈 문자열도 허용
+            text: text.trim()
+        });
 
         setText('');
     };
 
     return (
         <div className={styles.container}>
-            <input
-                value={port}
-                onChange={handleChangePort}
-                className={styles.input}
-                type="text"
-                placeholder="port..."
-            />
-            <input
+            <span className={styles.title}>Message</span>
+            <textarea
                 value={text}
                 onChange={handleChangeText}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSubmit();
+                    }
+                }}
                 className={styles.input}
-                type="text"
-                placeholder="text here..."
+                placeholder="메시지를 입력하세요..."
             />
             <button onClick={handleSubmit} className={styles.button}>
-                Submit
+                Send Message
             </button>
         </div>
     );

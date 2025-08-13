@@ -1,44 +1,122 @@
-.container{
-  width: 230px;
-  height: 40px;
-  display: flex;
+.container {
+  display:  flex;
   flex-direction: column;
-  justify-content: end;
-  gap: 10px;
-  .input {
-    padding: 10px 14px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    width: 200px;
+  gap: 12px;
+  //background: red;
+  z-index: 1000;
+  min-width: 280px;
+}
 
-    &:focus {
-      border-color: #ff9800; /* 주황 */
-      box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.15);
-    }
+.input {
+  padding: 12px 16px;
+  font-size: 14px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #343a40;
+  line-height: 1.4;
+
+  &::placeholder {
+    color: #6c757d;
   }
 
-  .button {
-
-    width: 230px;
-    padding: 10px 16px;
-    font-size: 14px;
-    border: none;
-    border-radius: 6px;
-    background-color: #ff9800; /* 주황 */
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-
-    &:hover {
-      background-color: #e68a00; /* 진한 주황 */
-    }
-
-    &:active {
-      transform: scale(0.97);
-    }
+  &:focus {
+    border-color: #6c757d;
+    box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.1);
+    transform: translateY(-1px);
   }
 
+  &:hover:not(:focus) {
+    border-color: #adb5bd;
+  }
+
+  // 포트 입력 필드 (첫 번째)
+  &:first-of-type {
+    font-weight: 500;
+  }
+
+  // 텍스트 입력 필드 (두 번째)
+  &:last-of-type {
+    min-height: 44px;
+  }
+}
+
+.button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #343a40;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &:hover {
+    background: #23272b;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(52, 58, 64, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(52, 58, 64, 0.2);
+  }
+
+  &:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+// 반응형 처리
+@media (max-width: 480px) {
+  .container {
+    right: 12px;
+    bottom: 12px;
+    min-width: 280px;
+    padding: 20px;
+  }
+}
+
+.portDisplay {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.portLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.portValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: #343a40;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.title{
+  font-size: 13px;
+  font-weight: 500;
+  color: #495057;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }

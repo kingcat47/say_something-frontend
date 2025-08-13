@@ -1,14 +1,25 @@
-// UpGround.tsx
 import styles from './styles.module.scss';
 import { useState, useEffect } from 'react';
 import { socket } from '../../socket.ts';
 
-interface Message {
+interface BaseMessage {
     id: number;
     port: string;
-    text: string;
-    left: number; // 화면에서의 x 좌표
+    left: number;
+    type: 'text' | 'image';
 }
+
+interface TextMessage extends BaseMessage {
+    type: 'text';
+    text: string;
+}
+
+interface ImageMessage extends BaseMessage {
+    type: 'image';
+    base64Src: string; // base64 이미지 src
+}
+
+type Message = TextMessage | ImageMessage;
 
 let nextId = 0;
 
@@ -16,17 +27,33 @@ export default function UpGround() {
     const [messages, setMessages] = useState<Message[]>([]);
 
     useEffect(() => {
+        // 텍스트 메시지
         socket.on("message", (msg: { port: string; text: string }) => {
-            const newMsg: Message = {
+            const newMsg: TextMessage = {
                 id: nextId++,
                 port: msg.port || "ALL",
+                type: "text",
                 text: msg.text,
-                left: Math.random() * 80 // 0~80vw 안에서 랜덤 위치
+                left: Math.random() * 80
+            };
+            setMessages(prev => [...prev, newMsg]);
+            setTimeout(() => {
+                setMessages(prev => prev.filter(m => m.id !== newMsg.id));
+            }, 4000);
+        });
+
+        // 이미지 메시지 (base64)
+        socket.on("image", (msg: { port: string; file: string }) => {
+            const newMsg: ImageMessage = {
+                id: nextId++,
+                port: msg.port || "ALL",
+                type: "image",
+                base64Src: msg.file, // base64 문자열 직접 사용
+                left: Math.random() * 80
             };
 
             setMessages(prev => [...prev, newMsg]);
 
-            // 4초 후 메시지 삭제 (애니메이션 길이에 맞춰서)
             setTimeout(() => {
                 setMessages(prev => prev.filter(m => m.id !== newMsg.id));
             }, 4000);
@@ -34,6 +61,7 @@ export default function UpGround() {
 
         return () => {
             socket.off("message");
+            socket.off("image");
         };
     }, []);
 
@@ -45,7 +73,16 @@ export default function UpGround() {
                     className={styles.bubble}
                     style={{ left: `${msg.left}vw` }}
                 >
-                    <span className={styles.port}>[{msg.port}]</span> {msg.text}
+                    <span className={styles.port}>[{msg.port}]</span>
+                    {msg.type === 'text' ? (
+                        msg.text
+                    ) : (
+                        <img
+                            src={msg.base64Src}
+                            alt={`port ${msg.port} image`}
+                            className={styles.image}
+                        />
+                    )}
                 </div>
             ))}
         </div>

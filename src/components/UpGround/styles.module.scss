@@ -1,7 +1,7 @@
 .container{
   height: 100vh;
-  width: 80%;
-  background-color: orange;
+  width: 100%;
+  background: white;
 }
 
 .bubble {
@@ -13,11 +13,21 @@
   font-size: 14px;
   animation: floatUp 4s linear forwards;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .port {
   font-weight: bold;
-  margin-right: 4px;
+  margin-right: 5px;
+}
+
+.image {
+  max-width: 120px;
+  max-height: 90px;
+  border-radius: 12px;
+  object-fit: contain;
 }
 
 @keyframes floatUp {
