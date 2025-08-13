@@ -16,7 +16,7 @@ export default function FillterPort() {
 
     useEffect(() => {
         if(socket){
-            socket.emit("setReadPort", {readPort});
+            socket.emit("setReadPort", { read_port: readPort });
         }
     }, [readPort, socket]);
 
