@@ -6,7 +6,7 @@ export default function FillterPort() {
     const [readPort, setReadPort] = useState('');
     const [socket, setSocket] = useState<Socket | null>(null);
     useEffect(() => {
-        const newSoket = io("http://saysome.thnos.app:3000",)
+        const newSoket = io("https://saysome.thnos.app",)
         setSocket(newSoket);
 
         return () =>{

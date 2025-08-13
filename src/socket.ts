@@ -1,3 +1,3 @@
 import { io } from "socket.io-client";
 
-export const socket = io("http://saysome.thnos.app:")
+export const socket = io("https://saysome.thnos.app:")

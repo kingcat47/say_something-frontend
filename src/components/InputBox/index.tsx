@@ -9,7 +9,7 @@ export default function InputBox(){
     const [socket, setSocket] = useState<Socket>();
 
     useEffect(() => {
-        const newSocket = io("http://saysome.thnos.app:3000", );
+        const newSocket = io("https://saysome.thnos.app", );
         setSocket(newSocket);
 
         return () => {
