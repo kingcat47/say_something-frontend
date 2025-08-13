@@ -1,7 +1,6 @@
-// InputBox.tsx
 import styles from './styles.module.scss';
 import { useState } from "react";
-import { socket } from "../../socket"; // 전역 socket 불러오기
+import { socket } from "../../socket"; // 전역 소켓 사용
 
 export default function InputBox() {
     const [text, setText] = useState('');
@@ -20,12 +19,10 @@ export default function InputBox() {
             alert("please input text");
             return;
         }
-        if (!port.trim()) {
-            alert("please input port");
-            return;
-        }
 
-        socket.emit("sendMessage", { port, text });
+        // 비어있으면 기본값 ""
+        socket.emit("sendMessage", { port: String(port || ''), text: text.trim() });
+
         setText('');
     };
 
