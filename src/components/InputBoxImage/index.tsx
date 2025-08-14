@@ -22,63 +22,42 @@ export default function InputBoxImage({ port }: InputBoxImageProps) {
         let offset = 0;
         const reader = new FileReader();
 
-        const sendChunk = (chunk: ArrayBuffer) => {
-            const base64Chunk = btoa(
-                new Uint8Array(chunk).reduce((data, byte) => data + String.fromCharCode(byte), '')
-            );
-                console.log('이미지 전송 중...');
-            socket.emit("sendImage", {
-                port: port.trim() || '',
-                fileChunk: base64Chunk,
-                isLastChunk: offset >= fileToSend.size
-            });
-        };
-
-        reader.onload = () => {
-            if (reader.result instanceof ArrayBuffer) {
-                sendChunk(reader.result);
-                offset += chunkSize;
-                if (offset < fileToSend.size) {
-                    readNextChunk();
-                }
-            } else {
-                console.error("Unexpected FileReader result type");
-            }
-        };
-
-        reader.onerror = (error) => {
-            console.error("Error reading file:", error);
-        };
-
         const readNextChunk = () => {
             const slice = fileToSend.slice(offset, offset + chunkSize);
             reader.readAsArrayBuffer(slice);
         };
 
+        reader.onload = () => {
+            if (!(reader.result instanceof ArrayBuffer)) return;
+
+            const chunk = reader.result;
+            const isLastChunk = offset + chunkSize >= fileToSend.size;
+
+            socket.emit("sendImage", {
+                port: port.trim() || '',
+                fileChunk: chunk,
+                chunkIndex: Math.floor(offset / chunkSize),
+                isLastChunk
+            });
+
+            offset += chunkSize;
+            if (!isLastChunk) readNextChunk();
+        };
+
+        reader.onerror = (err) => console.error(err);
+
         readNextChunk();
     };
-
 
     const handleSubmit = () => {
         if (!file) {
             alert("Please select an image file.");
             return;
         }
-
-        console.log('이미지전송');
         sendImage(file);
-
-        console.log('이미지초기화');
         setFile(null);
-
-        const inputElement = document.getElementById("image-file-input") as HTMLInputElement | null;
-        if (inputElement) inputElement.value = "";
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter") {
-            handleSubmit();
-        }
+        const input = document.getElementById("image-file-input") as HTMLInputElement | null;
+        if (input) input.value = "";
     };
 
     return (
@@ -90,11 +69,9 @@ export default function InputBoxImage({ port }: InputBoxImageProps) {
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
-                    onKeyDown={handleKeyDown}
                     className={styles.input}
                 />
             </div>
-
             <button onClick={handleSubmit} className={styles.button}>
                 Send Image
             </button>
