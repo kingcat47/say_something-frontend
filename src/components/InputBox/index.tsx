@@ -13,10 +13,10 @@ export default function InputBox({ port }: InputBoxProps) {
         setText(e.target.value);
     };
     const handleSubmit = () => {
-        if (!text.trim()) {
-            alert("Please input text");
-            return;
-        }
+        // if (!text.trim()) {
+        //     alert("Please input text");
+        //     return;
+        // }
 
         socket.emit("sendMessage", {
             port: port.trim() || '', // 빈 문자열도 허용
