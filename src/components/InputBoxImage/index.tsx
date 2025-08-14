@@ -25,7 +25,7 @@ export default function InputBoxImage({ port }: InputBoxImageProps) {
             formData.append("port", port.trim() || "");
             formData.append("file", fileToSend);
 
-            await axios.post(`${BASE_URL}/image`, formData, {
+            await axios.post(`${BASE_URL}/image/upload`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
