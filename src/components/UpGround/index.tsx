@@ -16,7 +16,7 @@ interface TextMessage extends BaseMessage {
 
 interface ImageMessage extends BaseMessage {
     type: 'image';
-    base64Src: string; // base64 이미지 src
+    url: string; // R2 URL
 }
 
 type Message = TextMessage | ImageMessage;
@@ -25,7 +25,6 @@ let nextId = 0;
 
 export default function UpGround() {
     const [messages, setMessages] = useState<Message[]>([]);
-    const imageBuffers = new Map<string, string[]>(); // chunk 임시 저장
 
     useEffect(() => {
         // 텍스트 메시지
@@ -43,41 +42,25 @@ export default function UpGround() {
             }, 4000);
         });
 
-        // 이미지 메시지 (Chunk 방식)
-        socket.on("imageChunk", (data: { port: string; fileChunk: string; chunkIndex: number; isLastChunk: boolean }) => {
-            const chunkKey = data.port;
+        // 이미지 메시지 (URL 방식)
+        socket.on("image", (data: { port: string; url: string }) => {
+            const newMsg: ImageMessage = {
+                id: nextId++,
+                port: data.port || "ALL",
+                type: "image",
+                url: data.url,
+                left: Math.random() * 80
+            };
+            setMessages(prev => [...prev, newMsg]);
 
-            if (!imageBuffers.has(chunkKey)) {
-                imageBuffers.set(chunkKey, []);
-            }
-
-            const chunks = imageBuffers.get(chunkKey)!;
-            chunks[data.chunkIndex] = data.fileChunk;
-
-            if (data.isLastChunk) {
-                const fullBase64 = chunks.join('');
-                const newMsg: ImageMessage = {
-                    id: nextId++,
-                    port: data.port || "ALL",
-                    type: "image",
-                    base64Src: fullBase64,
-                    left: Math.random() * 80
-                };
-
-                setMessages(prev => [...prev, newMsg]);
-
-                setTimeout(() => {
-                    setMessages(prev => prev.filter(m => m.id !== newMsg.id));
-                }, 4000);
-
-                // 임시 buffer 삭제
-                imageBuffers.delete(chunkKey);
-            }
+            setTimeout(() => {
+                setMessages(prev => prev.filter(m => m.id !== newMsg.id));
+            }, 4000);
         });
 
         return () => {
             socket.off("message");
-            socket.off("imageChunk");
+            socket.off("image");
         };
     }, []);
 
@@ -94,7 +77,7 @@ export default function UpGround() {
                         msg.text
                     ) : (
                         <img
-                            src={msg.base64Src}
+                            src={msg.url}
                             alt={`port ${msg.port} image`}
                             className={styles.image}
                         />

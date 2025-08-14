@@ -1,12 +1,14 @@
 import styles from './styles.module.scss';
 import { useState } from "react";
-import { socket } from "../../socket";
+import { getApiBaseUrl } from "../../api.ts";
+import axios from "axios";
 
 interface InputBoxImageProps {
     port: string;
 }
 
 export default function InputBoxImage({ port }: InputBoxImageProps) {
+    const BASE_URL = getApiBaseUrl();
     const [file, setFile] = useState<File | null>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,58 +19,34 @@ export default function InputBoxImage({ port }: InputBoxImageProps) {
         }
     };
 
-    const sendImage = (fileToSend: File) => {
-        const chunkSize = 64 * 1024; // 64KB
-        let offset = 0;
-        const reader = new FileReader();
+    const sendImage = async (fileToSend: File) => {
+        try {
+            const formData = new FormData();
+            formData.append("port", port.trim() || "");
+            formData.append("file", fileToSend);
 
-        const sendChunk = (chunk: ArrayBuffer) => {
-            const base64Chunk = btoa(
-                new Uint8Array(chunk).reduce((data, byte) => data + String.fromCharCode(byte), '')
-            );
-
-            socket.emit("sendImage", {
-                port: port.trim() || '',
-                fileChunk: base64Chunk,
-                isLastChunk: offset >= fileToSend.size
+            await axios.post(`${BASE_URL}/image`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
             });
-        };
 
-        reader.onload = () => {
-            if (reader.result instanceof ArrayBuffer) {
-                sendChunk(reader.result);
-                offset += chunkSize;
-                if (offset < fileToSend.size) {
-                    readNextChunk();
-                }
-            } else {
-                console.error("Unexpected FileReader result type");
-            }
-        };
-
-        reader.onerror = (error) => {
-            console.error("Error reading file:", error);
-        };
-
-        const readNextChunk = () => {
-            const slice = fileToSend.slice(offset, offset + chunkSize);
-            reader.readAsArrayBuffer(slice);
-        };
-
-        readNextChunk();
+            console.log("이미지 전송 완료");
+        } catch (err) {
+            console.error("이미지 전송 실패:", err);
+        }
     };
 
-
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!file) {
             alert("Please select an image file.");
             return;
         }
 
-        console.log('이미지전송');
-        sendImage(file);
+        console.log("이미지 전송 시작");
+        await sendImage(file); // await 추가
 
-        console.log('이미지초기화');
+        console.log("이미지 초기화");
         setFile(null);
 
         const inputElement = document.getElementById("image-file-input") as HTMLInputElement | null;
