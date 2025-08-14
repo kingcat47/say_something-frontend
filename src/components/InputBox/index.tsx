@@ -2,78 +2,47 @@ import styles from './styles.module.scss';
 import { useState } from "react";
 import { socket } from "../../socket";
 
-interface InputBoxImageProps {
+interface InputBoxProps {
     port: string;
 }
 
-export default function InputBoxImage({ port }: InputBoxImageProps) {
-    const [file, setFile] = useState<File | null>(null);
+export default function InputBox({ port }: InputBoxProps) {
+    const [text, setText] = useState('');
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]);
-        } else {
-            setFile(null);
-        }
+    const handleChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setText(e.target.value);
     };
-
-    const sendImage = (fileToSend: File) => {
-        const chunkSize = 64 * 1024; // 64KB
-        let offset = 0;
-        const reader = new FileReader();
-
-        const readNextChunk = () => {
-            const slice = fileToSend.slice(offset, offset + chunkSize);
-            reader.readAsArrayBuffer(slice);
-        };
-
-        reader.onload = () => {
-            if (!(reader.result instanceof ArrayBuffer)) return;
-
-            const chunk = reader.result;
-            const isLastChunk = offset + chunkSize >= fileToSend.size;
-
-            socket.emit("sendImage", {
-                port: port.trim() || '',
-                fileChunk: chunk,
-                chunkIndex: Math.floor(offset / chunkSize),
-                isLastChunk
-            });
-
-            offset += chunkSize;
-            if (!isLastChunk) readNextChunk();
-        };
-
-        reader.onerror = (err) => console.error(err);
-
-        readNextChunk();
-    };
-
     const handleSubmit = () => {
-        if (!file) {
-            alert("Please select an image file.");
+        if (!text.trim()) {
+            alert("Please input text");
             return;
         }
-        sendImage(file);
-        setFile(null);
-        const input = document.getElementById("image-file-input") as HTMLInputElement | null;
-        if (input) input.value = "";
+
+        socket.emit("sendMessage", {
+            port: port.trim() || '', // 빈 문자열도 허용
+            text: text.trim()
+        });
+
+        setText('');
     };
 
     return (
         <div className={styles.container}>
-            <span className={styles.title}>Image</span>
-            <div className={styles.input_hover}>
-                <input
-                    id="image-file-input"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className={styles.input}
-                />
-            </div>
+            <span className={styles.title}>Message</span>
+            <textarea
+                value={text}
+                onChange={handleChangeText}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSubmit();
+                    }
+                }}
+                className={styles.input}
+                placeholder="메시지를 입력하세요..."
+            />
             <button onClick={handleSubmit} className={styles.button}>
-                Send Image
+                Send Message
             </button>
         </div>
     );
