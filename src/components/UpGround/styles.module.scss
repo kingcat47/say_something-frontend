@@ -1,4 +1,4 @@
-.container{
+.container {
   height: 100vh;
   width: 100%;
   background: white;
@@ -16,6 +16,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.imageBubble {
+  animation-delay: 1s; // 이미지 버블만 1초 뒤에 up!
 }
 
 .port {

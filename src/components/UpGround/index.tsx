@@ -17,7 +17,6 @@ interface TextMessage extends BaseMessage {
 interface ImageMessage extends BaseMessage {
     type: 'image';
     url: string;
-    show: boolean; // 애니메이션 시작 플래그
 }
 
 type Message = TextMessage | ImageMessage;
@@ -48,24 +47,12 @@ export default function UpGround() {
                 port: data.port || "ALL",
                 type: "image",
                 url: data.url,
-                left: Math.random() * 80,
-                show: false
+                left: Math.random() * 80
             };
             setMessages(prev => [...prev, newMsg]);
-            // 1초 후 show: true로 바꿔 floatUp 애니메이션 시작
             setTimeout(() => {
-                setMessages(prev =>
-                    prev.map(m =>
-                        m.id === newMsg.id && m.type === 'image'
-                            ? { ...m, show: true }
-                            : m
-                    )
-                );
-                // 4초 뒤 삭제 (1초 숨김 + 4초 floatUp = 5초 유지)
-                setTimeout(() => {
-                    setMessages(prev => prev.filter(m => m.id !== newMsg.id));
-                }, 4000);
-            }, 1000);
+                setMessages(prev => prev.filter(m => m.id !== newMsg.id));
+            }, 5000); // 총 5초 유지: 1초 대기 + 4초 애니메이션
         });
 
         return () => {
@@ -79,8 +66,12 @@ export default function UpGround() {
             {messages.map(msg => (
                 <div
                     key={msg.id}
-                    className={styles.bubble}
-                    style={{ left: `${msg.left}vw`, display: msg.type === 'image' && !(msg as ImageMessage).show ? 'none' : 'flex' }}
+                    className={
+                        msg.type === 'image'
+                            ? `${styles.bubble} ${styles.imageBubble}`
+                            : styles.bubble
+                    }
+                    style={{ left: `${msg.left}vw` }}
                 >
                     <span className={styles.port}>[{msg.port}]</span>
                     {msg.type === 'text' ? (
