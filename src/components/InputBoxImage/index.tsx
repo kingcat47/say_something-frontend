@@ -39,7 +39,7 @@ export default function InputBoxImage({ port }: InputBoxImageProps) {
 
     const handleSubmit = async () => {
         if (!file) {
-            alert("Please select an image file.");
+            // alert("Please select an image file.");
             return;
         }
 

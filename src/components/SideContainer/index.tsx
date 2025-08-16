@@ -18,7 +18,7 @@ export default function SideContainer() {
                         onChange={(e) => setSendPort(e.target.value.trim())}
                         className={styles.portInput}
                         type="text"
-                        placeholder="포트 (선택사항)"
+                        placeholder="Send Port (valgfritt)"
                     />
                 </div>
             </div>
