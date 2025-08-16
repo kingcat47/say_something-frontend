@@ -16,7 +16,8 @@ interface TextMessage extends BaseMessage {
 
 interface ImageMessage extends BaseMessage {
     type: 'image';
-    url: string; // R2 URL
+    url: string;
+    show: boolean; // 애니메이션 시작 플래그
 }
 
 type Message = TextMessage | ImageMessage;
@@ -27,7 +28,6 @@ export default function UpGround() {
     const [messages, setMessages] = useState<Message[]>([]);
 
     useEffect(() => {
-        // 텍스트 메시지
         socket.on("message", (msg: { port: string; text: string }) => {
             const newMsg: TextMessage = {
                 id: nextId++,
@@ -48,14 +48,24 @@ export default function UpGround() {
                 port: data.port || "ALL",
                 type: "image",
                 url: data.url,
-                left: Math.random() * 80
+                left: Math.random() * 80,
+                show: false
             };
-            console.log("받은 이미지 URL:", data.url);
             setMessages(prev => [...prev, newMsg]);
-
+            // 1초 후 show: true로 바꿔 floatUp 애니메이션 시작
             setTimeout(() => {
-                setMessages(prev => prev.filter(m => m.id !== newMsg.id));
-            }, 4000);
+                setMessages(prev =>
+                    prev.map(m =>
+                        m.id === newMsg.id && m.type === 'image'
+                            ? { ...m, show: true }
+                            : m
+                    )
+                );
+                // 4초 뒤 삭제 (1초 숨김 + 4초 floatUp = 5초 유지)
+                setTimeout(() => {
+                    setMessages(prev => prev.filter(m => m.id !== newMsg.id));
+                }, 4000);
+            }, 1000);
         });
 
         return () => {
@@ -70,7 +80,7 @@ export default function UpGround() {
                 <div
                     key={msg.id}
                     className={styles.bubble}
-                    style={{ left: `${msg.left}vw` }}
+                    style={{ left: `${msg.left}vw`, display: msg.type === 'image' && !(msg as ImageMessage).show ? 'none' : 'flex' }}
                 >
                     <span className={styles.port}>[{msg.port}]</span>
                     {msg.type === 'text' ? (
