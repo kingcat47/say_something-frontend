@@ -42,8 +42,6 @@ export default function UpGround() {
             }, 4000);
         });
 
-        // 이미지 메시지 (URL 방식)
-        console.log('니니니니니닌ㄴ이이잉이')
         socket.on("image", (data: { port: string; url: string }) => {
             const newMsg: ImageMessage = {
                 id: nextId++,
@@ -52,6 +50,7 @@ export default function UpGround() {
                 url: data.url,
                 left: Math.random() * 80
             };
+            console.log("받은 이미지 URL:", data.url);
             setMessages(prev => [...prev, newMsg]);
 
             setTimeout(() => {
