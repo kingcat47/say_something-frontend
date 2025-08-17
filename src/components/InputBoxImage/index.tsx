@@ -2,6 +2,7 @@ import styles from './styles.module.scss';
 import { useState } from "react";
 import { getApiBaseUrl } from "../../api.ts";
 import axios from "axios";
+import { socket } from "../../socket";
 
 interface InputBoxImageProps {
     port: string;
@@ -21,9 +22,15 @@ export default function InputBoxImage({ port }: InputBoxImageProps) {
 
     const sendImage = async (fileToSend: File) => {
         try {
+            if (!socket.id) {
+                alert("소켓 연결이 아직 완료되지 않았습니다!");
+                return;
+            }
+
             const formData = new FormData();
             formData.append("port", port.trim() || "");
             formData.append("file", fileToSend);
+            formData.append("socketId", socket.id);
 
             await axios.post(`${BASE_URL}/image/upload`, formData, {
                 headers: {
@@ -44,7 +51,7 @@ export default function InputBoxImage({ port }: InputBoxImageProps) {
         }
 
         console.log("이미지 전송 시작");
-        await sendImage(file); // await 추가
+        await sendImage(file);
 
         console.log("이미지 초기화");
         setFile(null);

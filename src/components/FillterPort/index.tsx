@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 import { useState, useEffect } from "react";
-import { socket } from "../../socket"; // 전역 소켓 import
+import { socket } from "../../socket";
 
 export default function FillterPort() {
     const [readPort, setReadPort] = useState('');

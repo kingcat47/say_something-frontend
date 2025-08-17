@@ -1,3 +1,5 @@
+/* src/components/styles.module.scss */
+
 .container {
   height: 100vh;
   width: calc(100% - 320px);
@@ -11,7 +13,7 @@
   background: white;
 }
 
-.chatBackground{
+.chatBackground {
   height: 100vh;
   width: calc(100% - 320px);
   margin-right: 320px;
@@ -69,7 +71,7 @@
 }
 
 .chatBubble {
-  background: #495057 ;
+  background: #495057;
   padding: 8px 12px;
   border-radius: 20px;
   font-size: 14px;
@@ -107,4 +109,30 @@
     transform: translateY(-100vh);
     opacity: 0;
   }
+}
+
+/* 채팅 모드에서 이름 스타일 */
+.chatBackground .senderName {
+  background: #495057;
+  color: #f1f3f5;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 14px;
+  font-size: 14px;
+  margin-right: 10px;
+  margin-bottom: 6px; /* 이름 밑 공간 추가로 겹침 방지 */
+  display: block; /* 블록으로 분리하여 이미지와 겹침 방지 */
+}
+
+/* 메시지 모드에서 이름 스타일 */
+.sendMode .senderName,
+.bubble .senderName {
+  background: #f1f3f5;
+  color: #495057; /* 원하시는 색상으로 조정 가능 */
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 13px;
+  margin-bottom: 6px;
+  display: block; /* 블록으로 분리 */
 }
