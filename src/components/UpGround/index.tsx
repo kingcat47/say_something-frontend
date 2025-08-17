@@ -1,12 +1,17 @@
 import styles from './styles.module.scss';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { socket } from '../../socket.ts';
+import { useTabStore } from '../../store/useTabStore.ts';
+import Picker from "../Picker";
+import ChatIcon from "../../assets/svg/on/message.svg"
+import SendIcon from "../../assets/svg/on/send.svg"
 
 interface BaseMessage {
     id: number;
     port: string;
     left: number;
     type: 'text' | 'image';
+    time: number;
 }
 
 interface TextMessage extends BaseMessage {
@@ -23,68 +28,116 @@ type Message = TextMessage | ImageMessage;
 
 let nextId = 0;
 
+
 export default function UpGround() {
     const [messages, setMessages] = useState<Message[]>([]);
+    const { selectedTab, setSelectedTab } = useTabStore();
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         socket.on("message", (msg: { port: string; text: string }) => {
             const newMsg: TextMessage = {
                 id: nextId++,
-                port: msg.port || "ALL",
+                port: msg.port || "",
                 type: "text",
                 text: msg.text,
-                left: Math.random() * 80
+                left: Math.random() * 80,
+                time: Date.now(),
             };
             setMessages(prev => [...prev, newMsg]);
-            setTimeout(() => {
-                setMessages(prev => prev.filter(m => m.id !== newMsg.id));
-            }, 4000);
+            if (selectedTab === 'send') {
+                setTimeout(() => setMessages(prev => prev.filter(m => m.id !== newMsg.id)), 4000);
+            }
         });
 
         socket.on("image", (data: { port: string; url: string }) => {
             const newMsg: ImageMessage = {
                 id: nextId++,
-                port: data.port || "ALL",
+                port: data.port || "",
                 type: "image",
                 url: data.url,
-                left: Math.random() * 80
+                left: Math.random() * 80,
+                time: Date.now(),
             };
             setMessages(prev => [...prev, newMsg]);
-            setTimeout(() => {
-                setMessages(prev => prev.filter(m => m.id !== newMsg.id));
-            }, 5000); // 총 5초 유지: 1초 대기 + 4초 애니메이션
+            if (selectedTab === 'send') {
+                setTimeout(() => setMessages(prev => prev.filter(m => m.id !== newMsg.id)), 5000);
+            }
         });
 
         return () => {
             socket.off("message");
             socket.off("image");
         };
-    }, []);
+    }, [selectedTab]);
+
+    useEffect(() => {
+        setMessages([]);
+    }, [selectedTab]);
+
+    useEffect(() => {
+        if (containerRef.current && selectedTab === 'chat') {
+            containerRef.current.scrollTop = 0;
+        }
+    }, [messages, selectedTab]);
 
     return (
-        <div className={styles.container}>
-            {messages.map(msg => (
-                <div
-                    key={msg.id}
-                    className={
-                        msg.type === 'image'
-                            ? `${styles.bubble} ${styles.imageBubble}`
-                            : styles.bubble
+        <div className={`${styles.container} ${selectedTab === 'chat' ? styles.chatBackground : styles.defaultBackground}`}>
+            <Picker tabs={tabs} selectedTab={selectedTab} onTabChange={setSelectedTab} />
+            {selectedTab === 'chat' ? (
+                <div className={styles.chatContainer} ref={containerRef}>
+                    {[...messages]
+                        .sort((a, b) => b.time - a.time)
+                        .map(msg => (
+                            <div
+                                key={msg.id}
+                                className={`${styles.chatBubble} ${msg.type === 'image' ? styles.chatImageBubble : ''}`}
+                            >
+                                <span className={styles.port}>[{msg.port}]</span>
+                                {msg.type === 'text' ? (
+                                    <span>{msg.text}</span>
+                                ) : (
+                                    <img
+                                        src={msg.url}
+                                        alt={`port ${msg.port} image`}
+                                        className={styles.chatImage}
+                                    />
+                                )}
+                            </div>
+                        ))
                     }
-                    style={{ left: `${msg.left}vw` }}
-                >
-                    <span className={styles.port}>[{msg.port}]</span>
-                    {msg.type === 'text' ? (
-                        msg.text
-                    ) : (
-                        <img
-                            src={msg.url}
-                            alt={`port ${msg.port} image`}
-                            className={styles.image}
-                        />
-                    )}
                 </div>
-            ))}
+            ) : (
+                messages.map(msg => (
+                    <div
+                        key={msg.id}
+                        className={`${styles.bubble} ${msg.type === 'image' ? styles.imageBubble : ''} ${selectedTab === 'send' ? styles.sendMode : ''}`}
+                        style={{ left: `${msg.left}vw` }}
+                    >
+                        <span className={styles.port}>[{msg.port}]</span>
+                        {msg.type === 'text' ? (
+                            msg.text
+                        ) : (
+                            <img
+                                src={msg.url}
+                                alt={`port ${msg.port} image`}
+                                className={styles.image}
+                            />
+                        )}
+                    </div>
+                ))
+            )}
         </div>
     );
 }
+
+const tabs = [
+    {
+        id: 'chat',
+        icon: <img src={ChatIcon} alt="chat" width={20} height={20} />,
+    },
+    {
+        id: 'send',
+        icon: <img src={SendIcon} alt="send" width={20} height={20} />,
+    }
+];

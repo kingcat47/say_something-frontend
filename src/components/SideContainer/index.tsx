@@ -4,13 +4,14 @@ import InputBox from "../InputBox";
 import FillterPort from "../FillterPort";
 import InputBoxImage from "../InputBoxImage";
 
+
 export default function SideContainer() {
     const [sendPort, setSendPort] = useState('');
 
     return (
         <div className={styles.container}>
             <div className={styles.portInputs}>
-                    <FillterPort />
+                <FillterPort />
                 <div className={styles.portContainer}>
                     <span className={styles.portTitle}>SEND PORT</span>
                     <input
@@ -26,7 +27,6 @@ export default function SideContainer() {
                 <InputBox port={sendPort} />
                 <InputBoxImage port={sendPort} />
             </div>
-
         </div>
     );
 }

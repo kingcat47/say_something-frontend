@@ -1,0 +1,58 @@
+.container {
+  display: flex;
+  gap: 6px;
+  padding: 3px;
+  background-color: rgba(55, 65, 81, 0.08);
+  //background-color: red;
+  position: relative;
+  left: 5px;
+  top: 5px;
+  border-radius: 16px;
+  width: 80px;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  background-color: transparent;
+
+  img {
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) saturate(100%) invert(18%) sepia(14%) saturate(762%) hue-rotate(173deg) brightness(94%) contrast(87%);
+    transition: filter 0.3s ease;
+  }
+
+  &:hover:not(.selected) {
+    background-color: rgba(55, 65, 81, 0.1);
+
+    img {
+      filter: brightness(0) saturate(100%) invert(12%) sepia(16%) saturate(1044%) hue-rotate(173deg) brightness(90%) contrast(90%);
+    }
+  }
+
+  &.selected {
+    background-color: #374151;
+    box-shadow: 0 2px 6px rgba(55, 65, 81, 0.2);
+
+    img {
+      filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+    }
+  }
+}
+
+.iconWrapper {
+  transition: transform 0.2s ease;
+
+  img {
+    transition: filter 0.3s ease;
+  }
+}

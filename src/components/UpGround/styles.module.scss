@@ -1,7 +1,38 @@
 .container {
   height: 100vh;
+  width: calc(100% - 320px);
+  background: white;
+  margin-right: 320px;
+}
+
+.defaultBackground {
+  height: 100vh;
   width: 100%;
   background: white;
+}
+
+.chatBackground{
+  height: 100vh;
+  width: calc(100% - 320px);
+  margin-right: 320px;
+  background-color: rgba(55, 65, 81, 0.08);
+}
+
+.chatContainer {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-75%);
+  width: 600px;
+  max-width: 90vw;
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: white;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
 }
 
 .bubble {
@@ -11,15 +42,18 @@
   padding: 8px 12px;
   border-radius: 16px;
   font-size: 14px;
-  animation: floatUp 4s linear forwards;
   white-space: nowrap;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.imageBubble {
-  animation-delay: 1s; // 이미지 버블만 1초 뒤에 up!
+.sendMode {
+  animation: floatUp 4s linear forwards;
+}
+
+.imageBubble.sendMode {
+  animation-delay: 1s;
 }
 
 .port {
@@ -28,8 +62,35 @@
 }
 
 .image {
-  max-width: 120px;
-  max-height: 90px;
+  max-width: 240px;
+  max-height: 180px;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.chatBubble {
+  background: #495057 ;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+  word-wrap: break-word;
+  align-self: flex-start;
+  max-width: 75%;
+  color: white;
+}
+
+.chatImageBubble {
+  padding: 4px;
+  background: transparent;
+  max-width: 240px;
+  max-height: 180px;
+  align-self: flex-start;
+}
+
+.chatImage {
+  max-width: 240px;
+  max-height: 180px;
   border-radius: 12px;
   object-fit: contain;
 }
