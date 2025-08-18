@@ -86,7 +86,15 @@ export default function UpGround() {
             containerRef.current.scrollTop = 0;
         }
     }, [messages, selectedTab]);
-
+    useEffect(() => {
+        function handleKeyDown(e: KeyboardEvent) {
+            if (e.ctrlKey && e.shiftKey && e.code === 'KeyL') {
+                setMessages([]);
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
     return (
         <div className={`${styles.container} ${selectedTab === 'chat' ? styles.chatBackground : styles.defaultBackground}`}>
             <Picker tabs={tabs} selectedTab={selectedTab} onTabChange={setSelectedTab} />
