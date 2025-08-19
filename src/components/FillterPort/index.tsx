@@ -21,7 +21,7 @@ export default function FillterPort() {
                 onChange={readingPort}
                 className={styles.input}
                 type="text"
-                placeholder="read_port"
+                placeholder="read_port(valgfritt)"
             />
         </div>
     );
