@@ -1,0 +1,42 @@
+.sendModeNumberContainer {
+  display: flex;
+  gap: 6px;
+  padding: 3px;
+  background-color: rgba(55, 65, 81, 0.08);
+  top: 5px;
+  border-radius: 8px;
+  position: relative;
+  right: 15px;
+  width: 80px;
+}
+
+.sendModeNumberContainer button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  background-color: transparent;
+  font-weight: 600;
+  color: #374151;
+  font-size: 16px;
+  user-select: none;
+}
+
+.sendModeNumberContainer button:hover:not(.active) {
+  background-color: rgba(55, 65, 81, 0.1);
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.sendModeNumberContainer button.active {
+  background-color: #374151;
+  box-shadow: 0 2px 6px rgba(55, 65, 81, 0.2);
+  color: #fff;
+  font-weight: 700;
+}

@@ -1,5 +1,3 @@
-/* src/components/styles.module.scss */
-
 .container {
   height: 100vh;
   width: calc(100% - 320px);
@@ -20,6 +18,7 @@
   background-color: rgba(55, 65, 81, 0.08);
 }
 
+/* 위치 10px 위로 올리기 위해 padding-top을 10px 늘림 */
 .chatContainer {
   position: fixed;
   top: 0;
@@ -27,7 +26,7 @@
   transform: translateX(-75%);
   width: 600px;
   max-width: 90vw;
-  height: 100%;
+  height: calc(100% - 10px);
   overflow-y: auto;
   padding: 20px;
   box-sizing: border-box;
@@ -39,7 +38,7 @@
 
 .bubble {
   position: absolute;
-  bottom: 0;
+  /* bottom: 0;  삭제하여 top으로 위치 제어 가능하게 */
   background: rgba(255, 255, 255, 0.8);
   padding: 8px 12px;
   border-radius: 16px;
@@ -50,10 +49,26 @@
   gap: 8px;
 }
 
-.sendMode {
+.sendMode1 {
   animation: floatUp 4s linear forwards;
 }
 
+.sendMode2 {
+  animation: floatRight 40s linear forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.sendMode3 {
+  animation: fadeOut 8s linear forwards;
+}
 .imageBubble.sendMode {
   animation-delay: 1s;
 }
@@ -71,28 +86,32 @@
 }
 
 .chatBubble {
-  background: #495057;
+  background: #f1f3f5;
+  color: #495057;
   padding: 8px 12px;
   border-radius: 20px;
   font-size: 14px;
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
   word-wrap: break-word;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction:  column;
   align-self: flex-start;
   max-width: 75%;
-  color: white;
 }
 
 .chatImageBubble {
   padding: 4px;
   background: transparent;
-  max-width: 240px;
-  max-height: 180px;
+  max-width: 360px;
+  max-height: 240px;
   align-self: flex-start;
+  margin-bottom: 20px;
 }
 
 .chatImage {
-  max-width: 240px;
-  max-height: 180px;
+  max-width: 360px;
+  max-height: 240px;
   border-radius: 12px;
   object-fit: contain;
 }
@@ -111,12 +130,22 @@
   }
 }
 
+@keyframes floatRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(200vw);
+    opacity: 0;
+  }
+}
+
 /* 채팅 모드에서 이름 스타일 */
 .chatBackground .senderName {
-  background: #495057;
-  color: #f1f3f5;
+  background: #f1f3f5;
+  color: #495057;
   font-weight: 700;
-  padding: 3px 9px;
   border-radius: 14px;
   font-size: 14px;
   margin-right: 10px;
@@ -135,4 +164,12 @@
   font-size: 13px;
   margin-bottom: 6px;
   display: block; /* 블록으로 분리 */
+}
+
+.topbuttonContainer{
+  max-width: calc(100% - 320px);
+  //background-color: red;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
 }
