@@ -39,7 +39,7 @@ export default function InputBox({ port }: InputBoxProps) {
                     }
                 }}
                 className={styles.input}
-                placeholder="메시지를 입력하세요..."
+                placeholder="Enter your message..."
             />
             <button onClick={handleSubmit} className={styles.button}>
                 Send Message

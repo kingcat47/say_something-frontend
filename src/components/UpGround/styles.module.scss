@@ -173,3 +173,13 @@
   justify-content: space-between;
   padding: 5px;
 }
+.chatGif, .gif, .chatGifBubble, .gifBubble {
+  max-width: 240px; /* 최대 너비 조절 */
+  max-height: 180px; /* 최대 높이 조절 */
+  width: 100%;       /* 반응형 너비 */
+  height: auto;
+  border-radius: 12px;
+  object-fit: contain;
+  z-index: 0;
+  pointer-events: none;
+}

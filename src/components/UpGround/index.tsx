@@ -11,7 +11,7 @@ interface BaseMessage {
     id: number;
     port: string;
     left: number;
-    type: 'text' | 'image';
+    type: 'text' | 'image' | 'gif';
     time: number;
     senderName?: string;
     top?: number;
@@ -27,7 +27,12 @@ interface ImageMessage extends BaseMessage {
     url: string;
 }
 
-type Message = TextMessage | ImageMessage;
+interface GifMessage extends BaseMessage {
+    type: 'gif';
+    gifUrl: string;
+}
+
+type Message = TextMessage | ImageMessage | GifMessage;
 
 let nextId = 0;
 
@@ -40,14 +45,11 @@ export default function UpGround() {
     useEffect(() => {
         function generateCoordinates(mode: 1 | 2 | 3) {
             if (mode === 1) {
-                // y = 완전 바닥 (window.innerHeight) - 메시지 높이(예: 36px)
                 return { left: Math.random() * 80, top: window.innerHeight - 36 };
             }
             if (mode === 2) {
-                // x=0, y 랜덤 (뷰포트 상단 36px 제외한 영역)
                 return { left: 0, top: 36 + Math.random() * (window.innerHeight - 100 - 36) };
             }
-            // mode 3: x,y 랜덤 (x는 vw, y는 px)
             return { left: Math.random() * 80, top: Math.random() * (window.innerHeight - 100) };
         }
 
@@ -87,9 +89,28 @@ export default function UpGround() {
             }
         });
 
+        socket.on("gif", (data: { port: string; gifUrl: string; senderName?: string }) => {
+            const coords = generateCoordinates(sendModeType);
+            const newMsg: GifMessage = {
+                id: nextId++,
+                port: data.port || "",
+                type: "gif",
+                gifUrl: data.gifUrl,
+                senderName: data.senderName,
+                left: coords.left,
+                top: coords.top,
+                time: Date.now(),
+            };
+            setMessages(prev => [...prev, newMsg]);
+            if (selectedTab === 'send') {
+                setTimeout(() => setMessages(prev => prev.filter(m => m.id !== newMsg.id)), 10000);
+            }
+        });
+
         return () => {
             socket.off("message");
             socket.off("image");
+            socket.off("gif");
         };
     }, [selectedTab, sendModeType]);
 
@@ -143,16 +164,22 @@ export default function UpGround() {
                         .map(msg => (
                             <div
                                 key={msg.id}
-                                className={`${styles.chatBubble} ${msg.type === 'image' ? styles.chatImageBubble : ''}`}
+                                className={`${styles.chatBubble} ${msg.type === 'image' ? styles.chatImageBubble : msg.type === 'gif' ? styles.chatGifBubble : ''}`}
                             >
                                 {msg.senderName && <span className={styles.senderName}>{msg.senderName}</span>}
-                                {msg.type === 'text' ? (
-                                    <span>{msg.text}</span>
-                                ) : (
+                                {msg.type === 'text' && <span>{msg.text}</span>}
+                                {msg.type === 'image' && (
                                     <img
                                         src={msg.url}
                                         alt={`port ${msg.port} image`}
                                         className={styles.chatImage}
+                                    />
+                                )}
+                                {msg.type === 'gif' && (
+                                    <img
+                                        src={msg.gifUrl}
+                                        alt={`port ${msg.port} gif`}
+                                        className={styles.chatGif}
                                     />
                                 )}
                             </div>
@@ -163,17 +190,23 @@ export default function UpGround() {
                 messages.map(msg => (
                     <div
                         key={msg.id}
-                        className={`${styles.bubble} ${msg.type === 'image' ? styles.imageBubble : ''} ${selectedTab === 'send' ? getSendModeClass() : ''}`}
+                        className={`${styles.bubble} ${msg.type === 'image' ? styles.imageBubble : msg.type === 'gif' ? styles.gifBubble : ''} ${selectedTab === 'send' ? getSendModeClass() : ''}`}
                         style={{ left: `${msg.left}vw`, top: `${msg.top}px`, position: 'absolute' }}
                     >
                         {msg.senderName && <span className={styles.senderName}>{msg.senderName}</span>}
-                        {msg.type === 'text' ? (
-                            msg.text
-                        ) : (
+                        {msg.type === 'text' && msg.text}
+                        {msg.type === 'image' && (
                             <img
                                 src={msg.url}
                                 alt={`port ${msg.port} image`}
                                 className={styles.image}
+                            />
+                        )}
+                        {msg.type === 'gif' && (
+                            <img
+                                src={msg.gifUrl}
+                                alt={`port ${msg.port} gif`}
+                                className={styles.gif}
                             />
                         )}
                     </div>
