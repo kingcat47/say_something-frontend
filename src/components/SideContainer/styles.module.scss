@@ -12,7 +12,7 @@
     top: 0;
     right: 0;
     z-index: 9999999;
-    @media {
+    @media (min-width: 100px){
         position: fixed;
         width: 100%;
         max-width: 100%;
