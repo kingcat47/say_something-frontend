@@ -17,4 +17,4 @@ Multi-language Support: Most features are also available in Korean, but the inte
 Usage
 Feel free to use the site and have fun sharing text, images, and GIFs with others in the same room!
 
-Website: https://frontsaysome.thnos.app/
+Website: https://ppoppippoppippi.thnos.app/
