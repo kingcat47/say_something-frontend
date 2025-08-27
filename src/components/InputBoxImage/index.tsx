@@ -45,19 +45,18 @@ export default function InputBoxImage({ port }: InputBoxImageProps) {
     };
 
     const handleSubmit = async () => {
-        if (!file) {
-            // alert("Please select an image file.");
-            return;
-        }
+        if (!file) return;
 
         console.log("이미지 전송 시작");
-        await sendImage(file);
+        const fileToSend = file;  // 현재 파일 변수에 저장
 
-        console.log("이미지 초기화");
         setFile(null);
-
         const inputElement = document.getElementById("image-file-input") as HTMLInputElement | null;
         if (inputElement) inputElement.value = "";
+
+        await sendImage(fileToSend);
+
+        console.log("이미지 초기화 완료");
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
