@@ -15,11 +15,10 @@
     @media (min-width: 100px){
         position: fixed;
         width: 100%;
-        top: 20%;
         max-width: 80%;
         min-width: auto;
         height: auto;
-        bottom: 0;
+        bottom: 20%;
         border-left: none;
         border-top: 2px solid #a8a8a8;
         flex-direction: column;
