@@ -44,13 +44,29 @@ export default function UpGround() {
 
     useEffect(() => {
         function generateCoordinates(mode: 1 | 2 | 3) {
+            const isMobile = window.innerWidth <= 768;
+            const maxLeft = isMobile ? 70 : 80; // 모바일에서는 더 작은 범위
+            const mobileTopOffset = isMobile ? 250 : 100; // 모바일에서 사이드 컨테이너 높이만큼 제외
+            
             if (mode === 1) {
-                return { left: Math.random() * 80, top: window.innerHeight - 36 };
+                if (isMobile) {
+                    // 모바일에서는 사이드 컨테이너 위에서 시작
+                    return { left: Math.random() * maxLeft, top: Math.random() * (window.innerHeight - mobileTopOffset) };
+                }
+                return { left: Math.random() * maxLeft, top: window.innerHeight - 36 };
             }
             if (mode === 2) {
+                if (isMobile) {
+                    // 모바일에서는 사이드 컨테이너 위에서 시작
+                    return { left: 0, top: 36 + Math.random() * (window.innerHeight - mobileTopOffset - 36) };
+                }
                 return { left: 0, top: 36 + Math.random() * (window.innerHeight - 100 - 36) };
             }
-            return { left: Math.random() * 80, top: Math.random() * (window.innerHeight - 100) };
+            if (isMobile) {
+                // 모바일에서는 사이드 컨테이너 위에서 시작
+                return { left: Math.random() * maxLeft, top: Math.random() * (window.innerHeight - mobileTopOffset) };
+            }
+            return { left: Math.random() * maxLeft, top: Math.random() * (window.innerHeight - 100) };
         }
 
         socket.on("message", (msg: { port: string; text: string; senderName?: string }) => {

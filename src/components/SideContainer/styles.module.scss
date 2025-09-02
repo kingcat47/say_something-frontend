@@ -116,3 +116,80 @@
     box-shadow: 0 2px 6px rgba(73, 80, 87, 0.35);
     cursor: default;
 }
+
+/* 모바일 반응형 스타일 */
+@media (max-width: 768px) {
+    .container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        height: auto;
+        min-width: 100%;
+        max-width: 100%;
+        border-left: none;
+        border-top: 2px solid #a8a8a8;
+        background: white;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        padding: 16px;
+        z-index: 9999; /* UpGround 버튼들보다 낮은 z-index */
+    }
+
+    .inpuscontainer {
+        position: static;
+        width: 100%;
+        max-width: 100%;
+        gap: 16px;
+        padding: 0;
+    }
+
+    .portInputs {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .portContainer {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .portInput {
+        width: 100%;
+        max-width: 100%;
+        font-size: 16px; /* 모바일에서 자동 확대 방지 */
+        padding: 16px;
+    }
+
+    .modeToggleContainer {
+        gap: 8px;
+        margin: 12px 0;
+    }
+
+    .modeToggleButton {
+        padding: 14px 0;
+        font-size: 16px;
+        min-height: 48px; /* 터치 친화적 크기 */
+    }
+}
+
+/* 작은 모바일 화면용 */
+@media (max-width: 480px) {
+    .container {
+        padding: 12px;
+    }
+
+    .inpuscontainer {
+        gap: 12px;
+    }
+
+    .portInput {
+        padding: 14px;
+        font-size: 16px;
+    }
+
+    .modeToggleButton {
+        padding: 12px 0;
+        min-height: 44px;
+    }
+}

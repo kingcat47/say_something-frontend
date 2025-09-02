@@ -181,20 +181,33 @@
   .container {
     width: 100%;
     margin-right: 0;
+    height: calc(100vh - 200px); /* SideContainer 높이만큼 제외 */
+    margin-bottom: 200px; /* SideContainer 높이만큼 여백 */
   }
 
   .chatBackground {
     width: 100%;
     margin-right: 0;
+    height: calc(100vh - 200px);
+    margin-bottom: 200px;
   }
 
   .chatContainer {
+    position: absolute; /* fixed에서 absolute로 변경 */
+    top: 0; /* 화면 상단에서 시작 */
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
-    max-width: 95vw;
-    height: 100vh;
+    width: 80%; /* 모바일에서는 더 좁게 */
+    max-width: 400px; /* 최대 너비 제한 */
+    height: calc(100vh - 220px);
     padding: 12px;
+    margin-bottom: 200px;
+    z-index: 9998; /* SideContainer보다 높지만 버튼들보다 낮음 */
+    background-color: white;
+    border-radius: 0;
+    box-shadow: none;
+    flex-direction: column-reverse; /* PC처럼 아래에서 올라오는 방식 */
+    justify-content: flex-end; /* 하단부터 시작 */
   }
 
   .chatBubble {
@@ -202,14 +215,77 @@
     font-size: 13px;
   }
 
-  .chatImage, .chatGif, .gif, .chatGifBubble {
-    max-width: 100%;
-    height: auto;
+  .chatImage, .chatGif {
+    max-width: 280px; /* 모바일에서 GIF/이미지 크기 줄임 */
+    max-height: 200px;
+  }
+
+  .chatGifBubble {
+    max-width: 280px; /* 모바일에서 GIF 크기 줄임 */
+    max-height: 200px;
   }
 
   .topbuttonContainer {
     max-width: 100%;
     flex-direction: column;
     gap: 6px;
+    padding: 8px;
+    position: relative;
+    z-index: 10000; /* 채팅 모드일 때 버튼들이 앞으로 나오도록 */
+  }
+
+  .bubble {
+    font-size: 13px;
+    padding: 6px 10px;
+    max-width: 80vw;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+
+  .image, .gif {
+    max-width: 200px;
+    max-height: 150px;
+  }
+}
+
+/* 작은 모바일 화면용 */
+@media (max-width: 480px) {
+  .container {
+    height: calc(100vh - 180px);
+    margin-bottom: 180px;
+  }
+
+  .chatBackground {
+    height: calc(100vh - 180px);
+    margin-bottom: 180px;
+  }
+
+  .chatContainer {
+    height: calc(100vh - 200px);
+    margin-bottom: 180px;
+    padding: 8px;
+    width: 85%; /* 작은 모바일에서는 조금 더 넓게 */
+    max-width: 350px; /* 최대 너비 제한 */
+  }
+
+  .topbuttonContainer {
+    padding: 6px;
+    gap: 4px;
+  }
+
+  .bubble {
+    font-size: 12px;
+    padding: 5px 8px;
+    max-width: 85vw;
+  }
+
+  .image, .gif {
+    max-width: 180px;
+    max-height: 130px;
+  }
+
+  .chatImage, .chatGif, .chatGifBubble {
+    max-width: 240px; /* 작은 모바일에서 GIF/이미지 크기 더 줄임 */
+    max-height: 180px;
   }
 }

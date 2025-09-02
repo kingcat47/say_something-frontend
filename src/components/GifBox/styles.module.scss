@@ -70,3 +70,59 @@
     transform: scale(1.05);
   }
 }
+
+/* 모바일 반응형 스타일 */
+@media (max-width: 768px) {
+  .container {
+    min-width: 100%;
+    max-width: 100%;
+    gap: 16px;
+  }
+
+  .input {
+    font-size: 16px; /* 모바일에서 자동 확대 방지 */
+    padding: 16px;
+    min-height: 48px; /* 터치 친화적 크기 */
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .gifScrollBox {
+    max-height: 200px;
+  }
+
+  .gifGrid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 6px;
+  }
+
+  .gifThumb {
+    min-height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    gap: 12px;
+  }
+
+  .input {
+    padding: 14px;
+    min-height: 44px;
+  }
+
+  .gifScrollBox {
+    max-height: 180px;
+  }
+
+  .gifGrid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 4px;
+  }
+
+  .gifThumb {
+    min-height: 60px;
+  }
+}

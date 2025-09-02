@@ -56,3 +56,42 @@
     transition: filter 0.3s ease;
   }
 }
+
+/* 모바일 반응형 스타일 */
+@media (max-width: 768px) {
+  .container {
+    width: 100px;
+    gap: 8px;
+    padding: 4px;
+  }
+
+  .item {
+    width: 42px;
+    height: 42px;
+    min-height: 42px; /* 터치 친화적 크기 */
+  }
+
+  .item img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 90px;
+    gap: 6px;
+    padding: 3px;
+  }
+
+  .item {
+    width: 40px;
+    height: 40px;
+    min-height: 40px;
+  }
+
+  .item img {
+    width: 16px;
+    height: 16px;
+  }
+}

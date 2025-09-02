@@ -1,11 +1,11 @@
 // import {Outlet} from 'react-router-dom'
 import SideContainer from "./components/SideContainer";
 import UpGround from "./components/UpGround";
+import styles from './App.module.scss';
+
 function App() {
-
-
   return (
-    <div style={{width: "100%", height: "100%"}}>
+    <div className={styles.appContainer}>
         <SideContainer/>
         <UpGround/>
         {/*<Outlet />*/}
