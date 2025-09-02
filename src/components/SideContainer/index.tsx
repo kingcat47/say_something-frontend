@@ -14,6 +14,13 @@ function ModeToggleButtons({
     value: ModeType;
     onChange: (mode: ModeType) => void;
 }) {
+    const isMobile = window.innerWidth <= 768;
+    
+    // 모바일에서는 텍스트 전송만 지원
+    if (isMobile) {
+        return null;
+    }
+
     return (
         <div className={styles.modeToggleContainer}>
             <button
@@ -41,6 +48,7 @@ export default function SideContainer() {
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [ifadmin, setAdmin] = useState<boolean>(false);
+    const isMobile = window.innerWidth <= 768;
 
     // sendPort가 변경될 때마다 소켓으로 readPort 설정 이벤트 전송
     useEffect(() => {
@@ -49,20 +57,6 @@ export default function SideContainer() {
 
     return (
         <div className={styles.container}>
-            {/*<div className={styles.portInputs}>*/}
-            {/*    /!* FillterPort 없이 sendPort 입력만 *!/*/}
-            {/*    <div className={styles.portContainer}>*/}
-            {/*        <span className={styles.portTitle}>SEND PORT</span>*/}
-            {/*        <input*/}
-            {/*            value={sendPort}*/}
-            {/*            onChange={(e) => setSendPort(e.target.value.trim())}*/}
-            {/*            className={styles.portInput}*/}
-            {/*            type="text"*/}
-            {/*            placeholder="Send Port (valgfritt)"*/}
-            {/*        />*/}
-            {/*    </div>*/}
-            {/*</div>*/}
-
             <div className={styles.inpuscontainer}>
                 <div className={styles.portInputs}>
                     {/* FillterPort 없이 sendPort 입력만 */}
@@ -79,8 +73,9 @@ export default function SideContainer() {
                 </div>
                 <InputBox port={sendPort} />
                 <ModeToggleButtons value={mode} onChange={setMode} />
-                {mode === 'image' && <InputBoxImage port={sendPort} />}
-                {mode === 'gif' && (
+                {/* 모바일에서는 텍스트 전송만 지원 */}
+                {!isMobile && mode === 'image' && <InputBoxImage port={sendPort} />}
+                {!isMobile && mode === 'gif' && (
                     <KlipyGifSearch
                         apiKey={'eWqL2I3hf49QYeomnZnZfgbvgSb15vf71f1pkmM2vdhnE3cfJ9Jw4MT9pwLZ41bH'}
                         onSelectGif={(gifUrl) => {

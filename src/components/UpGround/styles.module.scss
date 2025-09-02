@@ -181,15 +181,15 @@
   .container {
     width: 100%;
     margin-right: 0;
-    height: calc(100vh - 200px); /* SideContainer 높이만큼 제외 */
-    margin-bottom: 200px; /* SideContainer 높이만큼 여백 */
+    height: calc(100vh - 140px); /* SideContainer 높이만큼 제외 (140px) */
+    margin-bottom: 140px; /* SideContainer 높이만큼 여백 (140px) */
   }
 
   .chatBackground {
     width: 100%;
     margin-right: 0;
-    height: calc(100vh - 200px);
-    margin-bottom: 200px;
+    height: calc(100vh - 140px);
+    margin-bottom: 140px;
   }
 
   .chatContainer {
@@ -199,15 +199,15 @@
     transform: translateX(-50%);
     width: 80%; /* 모바일에서는 더 좁게 */
     max-width: 400px; /* 최대 너비 제한 */
-    height: calc(100vh - 220px);
+    height: calc(100vh - 160px); /* SideContainer 높이만큼 제외 */
     padding: 12px;
-    margin-bottom: 200px;
+    margin-bottom: 140px;
     z-index: 9998; /* SideContainer보다 높지만 버튼들보다 낮음 */
     background-color: white;
     border-radius: 0;
     box-shadow: none;
-    flex-direction: column-reverse; /* PC처럼 아래에서 올라오는 방식 */
-    justify-content: flex-end; /* 하단부터 시작 */
+    flex-direction: column; /* 모바일에서는 위에서부터 아래로 쌓이도록 */
+    justify-content: flex-start; /* 상단부터 시작 */
   }
 
   .chatBubble {
@@ -251,21 +251,23 @@
 /* 작은 모바일 화면용 */
 @media (max-width: 480px) {
   .container {
-    height: calc(100vh - 180px);
-    margin-bottom: 180px;
+    height: calc(100vh - 120px); /* SideContainer 높이만큼 제외 (120px) */
+    margin-bottom: 120px;
   }
 
   .chatBackground {
-    height: calc(100vh - 180px);
-    margin-bottom: 180px;
+    height: calc(100vh - 120px);
+    margin-bottom: 120px;
   }
 
   .chatContainer {
-    height: calc(100vh - 200px);
-    margin-bottom: 180px;
+    height: calc(100vh - 140px); /* SideContainer 높이만큼 제외 */
+    margin-bottom: 120px;
     padding: 8px;
     width: 85%; /* 작은 모바일에서는 조금 더 넓게 */
     max-width: 350px; /* 최대 너비 제한 */
+    flex-direction: column; /* 모바일에서는 위에서부터 아래로 쌓이도록 */
+    justify-content: flex-start; /* 상단부터 시작 */
   }
 
   .topbuttonContainer {
