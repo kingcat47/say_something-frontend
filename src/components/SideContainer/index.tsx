@@ -77,7 +77,7 @@ export default function SideContainer() {
                 {!isMobile && mode === 'image' && <InputBoxImage port={sendPort} />}
                 {!isMobile && mode === 'gif' && (
                     <KlipyGifSearch
-                        apiKey={'eWqL2I3hf49QYeomnZnZfgbvgSb15vf71f1pkmM2vdhnE3cfJ9Jw4MT9pwLZ41bH'}
+                        apiKey={'HLPp8ACogMkxky20eYOQ8xZMYz3xVb8IVs5i8yMhX117WVXZaUj1pMcJg0M4Lyfo'}
                         onSelectGif={(gifUrl) => {
                             console.log('선택한 GIF URL:', gifUrl);
                             socket.emit('sendGif', { port: sendPort, gifUrl });
