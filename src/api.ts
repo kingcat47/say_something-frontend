@@ -1,3 +1,3 @@
 export const getApiBaseUrl = () => {
-    return "https://saysome.thnos.app";
+  return "say-something-frontend-d06znjusd-kingcat47s-projects.vercel.app";
 };
