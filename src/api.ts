@@ -1,3 +1,3 @@
 export const getApiBaseUrl = () => {
-  return "say-something-frontend-d06znjusd-kingcat47s-projects.vercel.app";
+  return "https://say-something-backend-atdx.vercel.app";
 };
