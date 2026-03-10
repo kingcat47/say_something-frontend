@@ -1,3 +1,3 @@
 export const getApiBaseUrl = () => {
-  return "https://say-something-backend-atdx.vercel.app";
+  return "https://say.hana.ovh/";
 };
