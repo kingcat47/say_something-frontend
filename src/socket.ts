@@ -1,3 +1,3 @@
 import { io } from "socket.io-client";
 
-export const socket = io("https://say.hana.ovh/");
+export const socket = io("https://say.hana.edu.pl/");
