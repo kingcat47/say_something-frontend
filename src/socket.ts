@@ -1,3 +1,4 @@
 import { io } from "socket.io-client";
 
-export const socket = io("https://say.hana.edu.pl/");
+const SERVER_URL = import.meta.env.DEV ? "http://localhost:3000" : "https://say.hana.edu.pl/";
+export const socket = io(SERVER_URL);
