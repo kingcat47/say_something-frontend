@@ -1,68 +1,44 @@
 import styles from './styles.module.scss';
-import { useState } from "react";
-import { getApiBaseUrl } from "../../api.ts";
-import axios from "axios";
-import { socket } from "../../socket";
+import { useState, useRef } from 'react';
+import { socket } from '../../socket';
+import apiClient from '../../api';
 
 interface InputBoxImageProps {
     port: string;
 }
 
 export default function InputBoxImage({ port }: InputBoxImageProps) {
-    const BASE_URL = getApiBaseUrl();
     const [file, setFile] = useState<File | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]);
-        } else {
-            setFile(null);
-        }
+        setFile(e.target.files?.[0] ?? null);
     };
 
     const sendImage = async (fileToSend: File) => {
         try {
             if (!socket.id) {
-                alert("소켓 연결이 아직 완료되지 않았습니다!");
+                alert('소켓 연결이 아직 완료되지 않았습니다!');
                 return;
             }
-
             const formData = new FormData();
-            formData.append("port", port.trim() || "");
-            formData.append("file", fileToSend);
-            formData.append("socketId", socket.id);
-
-            await axios.post(`${BASE_URL}/image/upload`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+            formData.append('port', port.trim() || '');
+            formData.append('file', fileToSend);
+            formData.append('socketId', socket.id);
+            await apiClient.post('/image/upload', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
             });
-
-            console.log("이미지 전송 완료");
         } catch (err) {
-            console.error("이미지 전송 실패:", err);
+            console.error('이미지 전송 실패:', err);
         }
     };
 
     const handleSubmit = async () => {
         if (!file) return;
-
-        console.log("이미지 전송 시작");
-        const fileToSend = file;  // 현재 파일 변수에 저장
-
+        const fileToSend = file;
         setFile(null);
-        const inputElement = document.getElementById("image-file-input") as HTMLInputElement | null;
-        if (inputElement) inputElement.value = "";
-
+        if (fileInputRef.current) fileInputRef.current.value = '';
         await sendImage(fileToSend);
-
-        console.log("이미지 초기화 완료");
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter") {
-            handleSubmit();
-        }
     };
 
     return (
@@ -70,15 +46,14 @@ export default function InputBoxImage({ port }: InputBoxImageProps) {
             <span className={styles.title}>Image</span>
             <div className={styles.input_hover}>
                 <input
-                    id="image-file-input"
+                    ref={fileInputRef}
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
-                    onKeyDown={handleKeyDown}
+                    onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
                     className={styles.input}
                 />
             </div>
-
             <button onClick={handleSubmit} className={styles.button}>
                 Send Image
             </button>
