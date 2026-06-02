@@ -7,8 +7,5 @@ interface TabStore {
 
 export const useTabStore = create<TabStore>((set) => ({
     selectedTab: 'send',
-    setSelectedTab: (tab: string) => {
-        console.log('Zustand: Setting tab to', tab);
-        set({ selectedTab: tab });
-    },
+    setSelectedTab: (tab: string) => set({ selectedTab: tab }),
 }));
