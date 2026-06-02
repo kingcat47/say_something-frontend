@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 import { useState, useEffect } from 'react';
 import InputBox from '../InputBox';
 import InputBoxImage from '../InputBoxImage';
-import KlipyGifSearch from '../GifBox';
+import GifSearch from '../GifSearch';
 import ModeToggleButtons from './ModeToggleButtons';
 import { useIsMobile } from '../../hooks/useIsMobile';
 
@@ -39,7 +39,7 @@ export default function SideContainer() {
                 <ModeToggleButtons value={mode} onChange={setMode} />
                 {!isMobile && mode === 'image' && <InputBoxImage port={sendPort} />}
                 {!isMobile && mode === 'gif' && (
-                    <KlipyGifSearch
+                    <GifSearch
                         apiKey={KLIPY_API_KEY}
                         onSelectGif={(gifUrl) => socket.emit('sendGif', { port: sendPort, gifUrl })}
                     />

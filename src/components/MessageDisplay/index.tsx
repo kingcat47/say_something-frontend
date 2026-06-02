@@ -2,9 +2,9 @@ import styles from './styles.module.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useTabStore } from '../../store/useTabStore';
 import Picker from '../Picker';
-import ChatIcon from '../../assets/svg/on/message.svg';
-import SendIcon from '../../assets/svg/on/send.svg';
-import SendModeNumber from '../SendModeNumber';
+import ChatIcon from '../../assets/svg/icons/message.svg';
+import SendIcon from '../../assets/svg/icons/send.svg';
+import ModeSelector from '../ModeSelector';
 import { useMessages } from '../../hooks/useMessages';
 
 const tabs = [
@@ -18,7 +18,7 @@ const tabs = [
     },
 ];
 
-export default function UpGround() {
+export default function MessageDisplay() {
     const [sendModeType, setSendModeType] = useState<1 | 2 | 3>(1);
     const { selectedTab, setSelectedTab } = useTabStore();
     const containerRef = useRef<HTMLDivElement>(null);
@@ -44,7 +44,7 @@ export default function UpGround() {
             <div className={styles.topbuttonContainer}>
                 <Picker tabs={tabs} selectedTab={selectedTab} onTabChange={setSelectedTab} />
                 {selectedTab === 'send' && (
-                    <SendModeNumber value={sendModeType} onChange={setSendModeType} />
+                    <ModeSelector value={sendModeType} onChange={setSendModeType} />
                 )}
             </div>
 

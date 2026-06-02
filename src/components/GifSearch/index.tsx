@@ -13,7 +13,7 @@ interface KlipyGifSearchProps {
     onSelectGif: (gifUrl: string) => void;
 }
 
-export default function KlipyGifSearch({ apiKey, onSelectGif }: KlipyGifSearchProps) {
+export default function GifSearch({ apiKey, onSelectGif }: KlipyGifSearchProps) {
     const [searchTerm, setSearchTerm] = useState('');
     const [gifs, setGifs] = useState<Gif[]>([]);
     const [isLoading, setIsLoading] = useState(false);

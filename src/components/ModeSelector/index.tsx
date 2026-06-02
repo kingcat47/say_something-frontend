@@ -1,11 +1,11 @@
-import styles from './styels.module.scss'
+import styles from './styles.module.scss';
 
-interface SendModeNumberProps {
+interface ModeSelectorProps {
     onChange: (num: 1 | 2 | 3) => void;
     value: 1 | 2 | 3;
 }
 
-export default function SendModeNumber({ onChange, value }: SendModeNumberProps) {
+export default function ModeSelector({ onChange, value }: ModeSelectorProps) {
     return (
         <div className={styles.sendModeNumberContainer}>
             <button
