@@ -1,6 +1,7 @@
 import styles from './styles.module.scss';
 import { useState } from "react";
 import { socket } from "../../socket";
+import SendIcon from '../../assets/svg/icons/send.svg';
 
 interface InputBoxProps {
     port: string;
@@ -29,21 +30,24 @@ export default function InputBox({ port }: InputBoxProps) {
     return (
         <div className={styles.container}>
             <span className={styles.title}>Message</span>
-            <textarea
-                value={text}
-                onChange={handleChangeText}
-                onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSubmit();
-                    }
-                }}
-                className={styles.input}
-                placeholder="Enter your message..."
-            />
-            <button onClick={handleSubmit} className={styles.button}>
-                Send Message
-            </button>
+            <div className={styles.inputRow}>
+                <textarea
+                    value={text}
+                    onChange={handleChangeText}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSubmit();
+                        }
+                    }}
+                    className={styles.input}
+                    placeholder="Enter your message..."
+                />
+                <button onClick={handleSubmit} className={styles.button}>
+                    <img src={SendIcon} className={styles.sendIcon} alt="send" />
+                    <span className={styles.btnText}>Send Message</span>
+                </button>
+            </div>
         </div>
     );
 }

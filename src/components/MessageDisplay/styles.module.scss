@@ -181,27 +181,27 @@
   .container {
     width: 100%;
     margin-right: 0;
-    height: calc(100vh - 140px); /* SideContainer 높이만큼 제외 (140px) */
-    margin-bottom: 140px; /* SideContainer 높이만큼 여백 (140px) */
+    height: calc(100vh - 62px);
+    margin-bottom: 62px;
   }
 
   .chatBackground {
     width: 100%;
     margin-right: 0;
-    height: calc(100vh - 140px);
-    margin-bottom: 140px;
+    height: calc(100vh - 62px);
+    margin-bottom: 62px;
   }
 
   .chatContainer {
-    position: absolute; /* fixed에서 absolute로 변경 */
-    top: 0; /* 화면 상단에서 시작 */
+    position: absolute;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 80%; /* 모바일에서는 더 좁게 */
-    max-width: 400px; /* 최대 너비 제한 */
-    height: calc(100vh - 160px); /* SideContainer 높이만큼 제외 */
+    width: 80%;
+    max-width: 400px;
+    height: calc(100vh - 72px);
     padding: 12px;
-    margin-bottom: 140px;
+    margin-bottom: 62px;
     z-index: 9998; /* SideContainer보다 높지만 버튼들보다 낮음 */
     background-color: white;
     border-radius: 0;
@@ -251,18 +251,18 @@
 /* 작은 모바일 화면용 */
 @media (max-width: 480px) {
   .container {
-    height: calc(100vh - 120px); /* SideContainer 높이만큼 제외 (120px) */
-    margin-bottom: 120px;
+    height: calc(100vh - 62px);
+    margin-bottom: 62px;
   }
 
   .chatBackground {
-    height: calc(100vh - 120px);
-    margin-bottom: 120px;
+    height: calc(100vh - 62px);
+    margin-bottom: 62px;
   }
 
   .chatContainer {
-    height: calc(100vh - 140px); /* SideContainer 높이만큼 제외 */
-    margin-bottom: 120px;
+    height: calc(100vh - 72px);
+    margin-bottom: 62px;
     padding: 8px;
     width: 85%; /* 작은 모바일에서는 조금 더 넓게 */
     max-width: 350px; /* 최대 너비 제한 */
