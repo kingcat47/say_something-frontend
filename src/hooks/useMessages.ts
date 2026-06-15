@@ -31,7 +31,24 @@ let nextId = 0;
 //     return { left: Math.random() * maxLeft, top: Math.random() * (window.innerHeight - 100) };
 // }
 
-export function useMessages(selectedTab: string, sendModeType: 1 | 2 | 3) {
+function generateCoordinates(mode: 1 | 2 | 3) {
+    const isMobile = window.innerWidth <= 768;
+    const maxLeft = isMobile ? 70 : 80;
+    const mobileTopOffset = isMobile ? 250 : 100;
+
+    if (mode === 1) {
+        if (isMobile) return { left: Math.random() * maxLeft, top: Math.random() * (window.innerHeight - mobileTopOffset) };
+        return { left: Math.random() * maxLeft, top: window.innerHeight - 36 };
+    }
+    if (mode === 2) {
+        if (isMobile) return { left: 0, top: 36 + Math.random() * (window.innerHeight - mobileTopOffset - 36) };
+        return { left: 0, top: 36 + Math.random() * (window.innerHeight - 100 - 36) };
+    }
+    if (isMobile) return { left: Math.random() * maxLeft, top: Math.random() * (window.innerHeight - mobileTopOffset) };
+    return { left: Math.random() * maxLeft, top: Math.random() * (window.innerHeight - 100) };
+}
+
+export function useMessages(selectedTab: string, sendModeType: 1 | 2 | 3, algorithm: 'poisson' | 'random' = 'poisson') {
     const [messages, setMessages] = useState<Message[]>([]);
     const messagesRef = useRef<Message[]>([]);
 
@@ -40,14 +57,16 @@ export function useMessages(selectedTab: string, sendModeType: 1 | 2 | 3) {
     }, [messages]);
 
     useEffect(() => {
-        const getCoords = (type: Message['type']) => findPosition(
-            messagesRef.current,
-            type,
-            sendModeType,
-            window.innerWidth,
-            window.innerHeight,
-            window.innerWidth <= 768
-        );
+        const getCoords = (type: Message['type']) => algorithm === 'random'
+            ? generateCoordinates(sendModeType)
+            : findPosition(
+                messagesRef.current,
+                type,
+                sendModeType,
+                window.innerWidth,
+                window.innerHeight,
+                window.innerWidth <= 768
+            );
 
         socket.on('message', (msg: { port: string; text: string; senderName?: string }) => {
             const coords = getCoords('text');
@@ -108,7 +127,7 @@ export function useMessages(selectedTab: string, sendModeType: 1 | 2 | 3) {
             socket.off('image');
             socket.off('gif');
         };
-    }, [selectedTab, sendModeType]);
+    }, [selectedTab, sendModeType, algorithm]);
 
     useEffect(() => {
         setMessages([]);

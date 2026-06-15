@@ -18,11 +18,15 @@ const tabs = [
     },
 ];
 
-export default function MessageDisplay() {
+interface Props {
+    algorithm?: 'poisson' | 'random';
+}
+
+export default function MessageDisplay({ algorithm = 'poisson' }: Props) {
     const [sendModeType, setSendModeType] = useState<1 | 2 | 3>(1);
     const { selectedTab, setSelectedTab } = useTabStore();
     const containerRef = useRef<HTMLDivElement>(null);
-    const { messages } = useMessages(selectedTab, sendModeType);
+    const { messages } = useMessages(selectedTab, sendModeType, algorithm);
 
     useEffect(() => {
         if (containerRef.current && selectedTab === 'chat') {
